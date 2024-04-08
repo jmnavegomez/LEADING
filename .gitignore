@@ -1,2 +1,3 @@
+config_DB copy.ini
 config_DB.ini
 *.log

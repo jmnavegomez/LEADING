@@ -1,6 +1,6 @@
 import numpy as np
-from DTOs.constantes import bisiestoA
-from DTOs.constantes import ANYOELEGIDO as Anyo
+from constantes import bisiestoA
+from constantes import ANYOELEGIDO as Anyo
 # import accesos.AccesoCommons as AccesoCommons
 
 #*
