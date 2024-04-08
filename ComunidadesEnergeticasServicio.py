@@ -293,7 +293,7 @@ def obtenerParametrosEjecucionSimulacion(agenteEjecucionMySql,anyo):
         else:
             nRandom = 0
         #Para hacer pruebas con una comunidad concreta, quitar el comentario y poner el número en orden en el que aparece en la lista vector_idEnergyCommunity
-        # nRandom = 0
+        nRandom = 0
         logging.info("Random seleccionado: " + str(nRandom))
 
         # Nos quedamos con el seleccionado por el random
