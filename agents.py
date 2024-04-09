@@ -1,4 +1,4 @@
-import mysql.connector as mariadb
+import mariadb
 import sys
 import os
 from datetime import datetime as tiem
