@@ -265,7 +265,7 @@ def obtenerParametrosEjecucionSimulacion(agenteEjecucionMySql,anyo):
 
         # Por cada usuario cargamos su lista de consumos
         # private double consumos [][] = new double [3][7]
-        sqlCommunityProcess = "SELECT * FROM leading_db.energy_community_process WHERE (event_id = 20 AND result=1000) OR   (event_id = 30 AND result =1000) OR (event_id = 40 AND result =1001) ORDER BY id_energy_community_process desc"
+        sqlCommunityProcess = "SELECT * FROM leading_db.energy_community_process WHERE (event_id = 35 AND result =1000) OR (event_id = 40 AND result =1001) ORDER BY id_energy_community_process desc"
 
         rs_communityProcess = agenteEjecucionMySql.ejecutar(sqlCommunityProcess)
 

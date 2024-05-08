@@ -114,7 +114,12 @@ class ComunidadEnergeticaDTO:
                 #     Paso 1: Recorremos de nuevo para asignar el coeficiente de reparto para cada cliente
                 for it_cliente in range(len(usuariosComunidad)):
                     if(usuariosComunidad[it_cliente].getConsumos()[it_dia][it_hora] != None):
-                        coeficiente_base = (usuariosComunidad[it_cliente].getConsumos()[it_dia][it_hora].getValorDatoConsumoHorario() / consumoTotalComunidad_diaHora)
+                        if consumoTotalComunidad_diaHora!=0:
+                        
+                            coeficiente_base = (usuariosComunidad[it_cliente].getConsumos()[it_dia][it_hora].getValorDatoConsumoHorario () / consumoTotalComunidad_diaHora)
+                        else:
+                            coeficiente_base = 100/len(usuariosComunidad)
+                        
                         pobreza_energ = (100 - self.getPorcentajeDedicadoPobrezaEnergetica())
                         usuariosComunidad[it_cliente].getCoeficientesReparto()[it_dia][it_hora] = coeficiente_base * pobreza_energ
 
@@ -144,6 +149,7 @@ class ComunidadEnergeticaDTO:
                     cliente_it = self.getUsuariosComunidad()[it_cliente]
                     coeficienteReparto= cliente_it.getCoeficientesReparto()[it_dia][it_hora]
                     minimoRepartoCoeficiente = self.getCuotaParticipacion_min()
+
                     if(coeficienteReparto<=minimoRepartoCoeficiente):
                         diferenciaCoeficienteTotal_noCumple_minimo = diferenciaCoeficienteTotal_noCumple_minimo + (minimoRepartoCoeficiente - coeficienteReparto)
                         cliente_it.getCoeficientesReparto()[it_dia][it_hora] = minimoRepartoCoeficiente
@@ -162,13 +168,15 @@ class ComunidadEnergeticaDTO:
                         coeficienteReparto= cliente_it.getCoeficientesReparto()[it_dia][it_hora]
                         minimoRepartoCoeficiente = self.getCuotaParticipacion_min()
                         
+                        
+
                         if(coeficienteReparto>minimoRepartoCoeficiente): #  Es decir, que tiene margen
                             cliente_it.getCoeficientesReparto()[it_dia][it_hora] = cliente_it.getCoeficientesReparto()[it_dia][it_hora] - (cliente_it.getCoeficientesReparto()[it_dia][it_hora]/diferenciaCoeficienteTotal_siCumple_minimo) * diferenciaCoeficienteTotal_noCumple_minimo
                         
                     
                     
                     # Como no sabemos si con el cambio hemos estropeado alguno que antes SI cumplia, iteramos
-                    if(iterar_metodo & numInteracion <20):
+                    if(iterar_metodo & numInteracion <10):
                         
                         #     Imprimimos tras cada iteración el resultado particial que llevamos
                         #     self.imprimirCoeficientesRepartoClientes()
@@ -176,6 +184,11 @@ class ComunidadEnergeticaDTO:
                         #    print("Ejecutamos una nueva iteración del metodo participacionMinima")
                         self.obtenerCoeficientesReparto_cumplirCondiciones_cuotaMinima(iterar_metodo, numInteracion+1)
                     
+                    # elif numInteracion >=20:
+                    #     iterar_metodo = False
+                    #     return iterar_metodo
+                    # else:
+                    #     return numInteracion
                     
                 #     fin if
             #    for hora
@@ -194,6 +207,8 @@ class ComunidadEnergeticaDTO:
             1. usuariosComunidad (Coeficientes de reparto)
         """
                 
+        
+        logging.info("Cálculo del máximo")
         #     Recorremos cada día y hora, obteniendo el coeficiente de reparto para cada cliente
             
         #     Obtenemos el máximo del coeficiente de reparto para la comunidad
@@ -209,8 +224,10 @@ class ComunidadEnergeticaDTO:
                 for it_cliente in range(len(self.usuariosComunidad)):
                     cliente_it = self.getUsuariosComunidad()[it_cliente]
                     coeficienteReparto = cliente_it.getCoeficientesReparto()[it_dia][it_hora]
+
                     if(coeficienteReparto>=maximoRepartoCoeficiente):
-                        diferenciaCoeficienteTotal_noCumple_maximo = diferenciaCoeficienteTotal_noCumple_maximo + (maximoRepartoCoeficiente - coeficienteReparto)
+                        #Modificado 08/05/2024: (coeficienteReparto - maximoRepartoCoeficiente) Se cambiaron las posiciones.
+                        diferenciaCoeficienteTotal_noCumple_maximo = diferenciaCoeficienteTotal_noCumple_maximo + (coeficienteReparto - maximoRepartoCoeficiente)
                         cliente_it.getCoeficientesReparto()[it_dia][it_hora] = maximoRepartoCoeficiente
                     else:
                         diferenciaCoeficienteTotal_siCumple_maximo = diferenciaCoeficienteTotal_siCumple_maximo + coeficienteReparto
@@ -224,23 +241,38 @@ class ComunidadEnergeticaDTO:
                     #     Paso 2: Recorremos únicamente los que son mayores que el mímimo restandole lo que falta de manera podenderada
                     for it_cliente in range(len(self.usuariosComunidad)):
                         
+                        
                         cliente_it = self.getUsuariosComunidad()[it_cliente]
                         coeficienteReparto= cliente_it.getCoeficientesReparto()[it_dia][it_hora]
 
-                        if(coeficienteReparto<maximoRepartoCoeficiente): #     Es decir, que tiene margen
-                            cliente_it.getCoeficientesReparto()[it_dia][it_hora] = cliente_it.getCoeficientesReparto()[it_dia][it_hora] + (cliente_it.getCoeficientesReparto()[it_dia][it_hora]/diferenciaCoeficienteTotal_siCumple_maximo) * diferenciaCoeficienteTotal_noCumple_maximo
+                        # fecha = cliente_it.getConsumos()[it_dia][it_hora].getFcDatoConsumoHorario()
                         
+                        # logging.info("cliente "+str(it_cliente))
+                        # logging.info("fecha: "+str(cliente_it.getConsumos()[it_dia][it_hora].getFcDatoConsumoHorario()))
+                        # logging.info("consumo: "+str(cliente_it.getConsumos()[it_dia][it_hora].getValorDatoConsumoHorario()))
+                        # logging.info("Coef: "+str(coeficienteReparto))
+                        
+
+                        if(coeficienteReparto<maximoRepartoCoeficiente): #     Es decir, que tiene margen
+                            
+                            cliente_it.getCoeficientesReparto()[it_dia][it_hora] = cliente_it.getCoeficientesReparto()[it_dia][it_hora] + (cliente_it.getCoeficientesReparto()[it_dia][it_hora]/diferenciaCoeficienteTotal_siCumple_maximo) * diferenciaCoeficienteTotal_noCumple_maximo
                     
                     
                     #     Como no sabemos si con el cambio hemos estropeado alguno que antes SI cumplia, iteramos
-                    if(iterar_metodo & numInteracion <20 ):
+                    if(iterar_metodo and numInteracion <10 ):
                         
                         #     Imprimimos tras cada iteración el resultado particial que llevamos
                         #    self.imprimirCoeficientesRepartoClientes()
                         
                         #     print("Ejecutamos una nueva iteración del metodo participacionMaxima")
                         self.obtenerCoeficientesReparto_cumplirCondiciones_cuotaMaxima(iterar_metodo, numInteracion+1)
-                    
+
+                    # elif numInteracion >=20:
+                    #     iterar_metodo = False
+                    #     return iterar_metodo
+                    # else:
+                    #     return numInteracion
+
                     
                 #     fin if
              #    for hora
