@@ -176,7 +176,7 @@ class ComunidadEnergeticaDTO:
                     
                     
                     # Como no sabemos si con el cambio hemos estropeado alguno que antes SI cumplia, iteramos
-                    if(iterar_metodo & numInteracion <10):
+                    if(iterar_metodo and numInteracion <10):
                         
                         #     Imprimimos tras cada iteración el resultado particial que llevamos
                         #     self.imprimirCoeficientesRepartoClientes()
