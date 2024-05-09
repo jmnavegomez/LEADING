@@ -1,6 +1,7 @@
 import numpy as np
 from DTOs.constantes import bisiestoA
 from DTOs.constantes import ANYOELEGIDO as Anyo
+# import accesos.AccesoCommons as AccesoCommons
 
 #*
 # Objeto DTO (data object transfer).

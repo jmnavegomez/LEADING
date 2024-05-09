@@ -1,6 +1,6 @@
 import datetime
-import logging
 from DTOs.constantes import bisiestoA
+import logging
 from DTOs.constantes import ANYOELEGIDO as Anyo
 
 # ''' Niveles de logging
