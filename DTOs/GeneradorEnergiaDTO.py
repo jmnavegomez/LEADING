@@ -1,6 +1,6 @@
 import numpy as np
-from constantes import bisiestoA
-from constantes import ANYOELEGIDO as Anyo
+from DTOs.constantes import bisiestoA
+from DTOs.constantes import ANYOELEGIDO as Anyo
 
 #*
 # Objeto DTO (data object transfer).
